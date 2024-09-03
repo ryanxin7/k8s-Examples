@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: rook-ceph
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: registry.cn-beijing.aliyuncs.com/xxk8s/nginx:1.26.2
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: cephfs-storage
+          mountPath: /usr/share/nginx/html  # Nginx 默认网页目录
+      volumes:
+      - name: cephfs-storage
+        persistentVolumeClaim:
+          claimName: cephfs-pvc

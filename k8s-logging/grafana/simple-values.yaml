@@ -1,0 +1,26 @@
+# ci/simple-values.yaml
+image:
+  repository: registry.cn-beijing.aliyuncs.com/xxk8s/grafana
+  tag: "8.4.2"
+  sha: ""
+  pullPolicy: IfNotPresent
+
+
+service:
+  enabled: true
+  type: NodePort
+  port: 80
+  targetPort: 3000
+  nodePort: 31302
+  annotations: {}
+  labels: {}
+  portName: service
+
+rbac:
+  pspEnabled: false
+persistence:
+  enabled: true
+  storageClassName: rook-ceph-block-test1
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi

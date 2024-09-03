@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: test-pod
+spec:
+  storageClassName: rook-ceph-block-test1  # 使用刚刚创建的 RBD StorageClass
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi  # 请求 5Gi 的存储空间

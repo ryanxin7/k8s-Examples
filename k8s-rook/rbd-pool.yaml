@@ -1,0 +1,44 @@
+---
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
+metadata:
+  name: rbd-test1-pool
+  namespace: rook-ceph # namespace:cluster
+spec:
+  failureDomain: host
+  replicated:
+    size: 3
+    requireSafeReplicaSize: true
+    
+    # hybridStorage:
+    #   primaryDeviceClass: ssd
+    #   secondaryDeviceClass: hdd
+    
+    # replicasPerFailureDomain: 2
+    # subFailureDomain: host
+  
+  #crushRoot: my-root
+  
+  #deviceClass: my-class
+  parameters:
+    compression_mode: none
+    #target_size_ratio: ".5"
+    
+    
+  mirroring:
+    enabled: false
+    mode: image
+    # snapshotSchedules:
+    #   - interval: 24h # daily snapshots
+    #     startTime: 14:00:00-05:00
+  # reports pool mirroring status if enabled
+  #用于配置池的状态检查，尤其是镜像功能的状态检查。
+  statusCheck:
+    mirror:
+      disabled: false
+      interval: 60s
+  # quota in bytes and/or objects, default value is 0 (unlimited)
+  # quotas:
+  #   maxSize: "10Gi" # valid suffixes include k, M, G, T, P, E, Ki, Mi, Gi, Ti, Pi, Ei
+  #   maxObjects: 1000000000 # 1 billion objects
+

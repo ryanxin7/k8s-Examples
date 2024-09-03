@@ -1,0 +1,10 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: offline-plugin-private-demo
+spec:
+  plugin:
+    plugindemo:
+      Headers:
+        X-Demo: private-demo
+        Foo: bar

@@ -1,0 +1,29 @@
+image:
+  registry: registry.cn-beijing.aliyuncs.com/xxk8s
+  repository: kafka
+  tag: 3.2.0-debian-10-r4
+  pullPolicy: IfNotPresent
+
+
+
+persistence:
+  enabled: true
+  existingClaim: ""
+  storageClass: "rook-ceph-block-test1"
+  accessModes:
+    - ReadWriteOnce
+  size: 50Gi
+  annotations: {}
+  selector: {}
+  mountPath: /bitnami/kafka
+
+
+zookeeper:
+  enabled: true
+  replicaCount: 1
+  persistence:
+    enabled: true
+    storageClass: "rook-ceph-block-test1"
+    accessModes:
+      - ReadWriteOnce
+    size: 50Gi

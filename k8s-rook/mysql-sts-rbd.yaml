@@ -1,0 +1,72 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: mysql
+  namespace: test-pod
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      volumes:
+        - name: host-time
+          hostPath:
+            path: /etc/localtime
+            type: ''
+        - name: volume-cnf
+          configMap:
+            name: mysql-cnf
+            items:
+              - key: custom.cnf
+                path: custom.cnf
+            defaultMode: 420
+      containers:
+        - name: lstack-mysql
+          image: registry.cn-beijing.aliyuncs.com/xxk8s/mysql:5.7.38
+          ports:
+            - name: tcp-mysql
+              containerPort: 3306
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+          args:
+            - "--ignore-db-dir=lost+found"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2048Mi
+            requests:
+              cpu: 300m
+              memory: 500Mi
+          volumeMounts:
+            - name: host-time
+              mountPath: /etc/localtime
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+            - name: volume-cnf
+              mountPath: /etc/mysql/conf.d/custom.cnf
+              subPath: custom.cnf
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-data
+        namespace: test-pod
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+        storageClassName: rook-ceph-block-test1
+  serviceName: mysql-headless
+

@@ -1,0 +1,27 @@
+# values-prod.yaml
+loki:
+  enabled: true
+  replicas: 1
+  rbac:
+    pspEnabled: false
+  persistence:
+    enabled: true
+    storageClassName: rook-ceph-block-test1
+
+promtail:
+  enabled: true
+  rbac:
+    pspEnabled: false
+
+grafana:
+  enabled: true
+  service:
+    type: NodePort
+  rbac:
+    pspEnabled: false
+  persistence:
+    enabled: true
+    storageClassName: rook-ceph-block-test1
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi

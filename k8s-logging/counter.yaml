@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: counter-log
+  labels:
+    logging: 'true' # 一定要具有该标签才会被采集
+    logIndex: 'test' # 指定索引名称
+spec:
+  containers:
+    - name: count
+      image: registry.cn-beijing.aliyuncs.com/xxk8s/busybox:1.36.1
+      args:
+        [
+          /bin/sh,
+          -c,
+          'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 1; done',
+        ]
